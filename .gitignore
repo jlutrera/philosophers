@@ -1,0 +1,4 @@
+Docs
+*.o
+example.d
+.vscode
