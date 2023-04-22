@@ -14,11 +14,12 @@ LIB			=	-pthread
 W_FLAGS		=	-Wall -Wextra -Werror
 
 #  Colors
-CYAN		=	\e[36m
-YELLOW		=	\e[33m
-GREEN		=	\e[32m
-BLUE 		= 	\e[94m
-RESET		=	\e[0m
+CYAN		=	\033[0;36m
+YELLOW		=	\033[0;33m
+GREEN		=	\033[0;32m
+BLUE 		= 	\033[0;94m
+RED			=	\033[0;31m
+RESET		=	\033[0m
 
 # Rules
 all			:	$(NAME)

@@ -3,13 +3,10 @@
 void	ft_clean_memory(pthread_t *philos, pthread_mutex_t *forks, t_philo *philos_data, int n)
 {
 	int	i;
-		
+
 	i = -1;
 	while (++i < n)
-	{
-		pthread_join(philos[i], NULL);
 		pthread_mutex_destroy(&forks[i]);
-	}
 	free(philos);
 	free(forks);
 	free(philos_data);
@@ -17,11 +14,14 @@ void	ft_clean_memory(pthread_t *philos, pthread_mutex_t *forks, t_philo *philos_
 
 void	ft_print_message(char *s, unsigned long lap, int id, unsigned long i)
 {
+	unsigned long	now;
+
 	id++;
-	if (ft_strcmp("is eating 🍝", s) == 0)
-		printf("[%s%04li%s][%s%d%s] %s (%s%ld%s).\n", YELLOW, lap, NC, GREEN, id, NC, s, YELLOW, i, NC);
+	now = ft_get_time() - lap;
+	if (ft_strcmp(" ...............is eating 🍝", s) == 0)
+		printf("[%s%04li%s][%s%d%s] %s (%s%ld%s).\n", YELLOW, now, NC, GREEN, id, NC, s, YELLOW, i, NC);
 	else
-		printf("[%s%04li%s][%s%d%s] %s", YELLOW, lap, NC, GREEN, id, NC, s);
+		printf("[%s%04li%s][%s%d%s] %s", YELLOW, now, NC, GREEN, id, NC, s);
 }
 
 void	*table(void *arg)
@@ -40,30 +40,30 @@ void	*table(void *arg)
 		pthread_mutex_lock(phi->fork_left);
 		if ((ft_get_time() - hungry) >= phi->data_time.t_die)
 		{
-			ft_print_message("is dead 💀\n", origin, phi->id, i);
-			exit(1);
+			ft_print_message(" .................is dead 💀\n", origin, phi->id, i);
+			break;
 		}	
-		ft_print_message("has taken the fork left 🍴\n", origin, phi->id, i);
+		ft_print_message(" has taken the fork  left 🍴\n", origin, phi->id, i);
 		if (phi->fork_left != phi->fork_right)
 	        pthread_mutex_lock(phi->fork_right);
 		else
 			usleep(phi->data_time.t_die * 1000);
 		if ((ft_get_time() - hungry) >= phi->data_time.t_die)
 		{
-			ft_print_message("is dead 💀\n", origin, phi->id, i);
-			exit(1);
+			ft_print_message(" .................is dead 💀\n", origin, phi->id, i);
+			break;
 		}
-		ft_print_message("has taken the fork right 🍴\n", origin, phi->id, i);
-        ft_print_message("is eating 🍝", origin, phi->id, i);
+		ft_print_message(" has taken the fork right 🍴\n", origin, phi->id, i);
+        ft_print_message(" ...............is eating 🍝", origin, phi->id, i);
         usleep(phi->data_time.t_eat * 1000);
         hungry = ft_get_time();
 		pthread_mutex_unlock(phi->fork_right);
         pthread_mutex_unlock(phi->fork_left);
-    	ft_print_message("is sleeping 🌙\n", origin, phi->id, i);
+    	ft_print_message(" .............is sleeping 🌙\n", origin, phi->id, i);
         usleep(phi->data_time.t_sleep * 1000);
-		ft_print_message("is thinking 💭\n", origin, phi->id, i);
+		ft_print_message(" .............is thinking 💭\n", origin, phi->id, i);
 	}
-	exit(0);
+	return (NULL);
 }
 
 void	ft_init_data(int c, char **v, t_philo **philos_data, int n)
@@ -96,6 +96,7 @@ void	ft_init_threads(t_philo *philos_data, pthread_mutex_t *forks, pthread_t *ph
 {
 	int				i;
 	unsigned long	origin;
+	void 			*status;
 
 	i = -1;
 	origin = ft_get_time();
@@ -108,6 +109,7 @@ void	ft_init_threads(t_philo *philos_data, pthread_mutex_t *forks, pthread_t *ph
 		if (i % 2  != 0)
 			usleep(1000);
 		pthread_create(&philos[i], NULL, table, &philos_data[i]);
+		pthread_join(philos[i], &status);
 	}
 }
 
@@ -123,7 +125,11 @@ int main(int argc, char **argv)
 		return (ft_error_arguments());
 	philos_data = (t_philo *)malloc(n * sizeof(t_philo));
 	ft_init_data(argc, argv, &philos_data, n);
-	printf("[%s0000%s][%s·%s] Philosophers begin to eat, sleep and think !\n", YELLOW, NC, GREEN, NC);
+	printf("****************************************************\n");
+	printf("*                                                  *\n");
+	printf("*   Philosophers begin to eat, sleep and think !   *\n");
+	printf("*                                                  *\n");
+	printf("****************************************************\n");
 	philos = (pthread_t *)malloc(n * sizeof(pthread_t));
 	forks = (pthread_mutex_t *)malloc(n * sizeof(pthread_mutex_t));
 	if (!philos || !forks || !philos_data)

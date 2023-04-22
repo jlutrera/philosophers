@@ -1,4 +1,3 @@
-Docs
 *.o
-example.d
 .vscode
+.DS_Store
