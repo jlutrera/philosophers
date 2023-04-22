@@ -20,6 +20,7 @@ typedef struct
 	unsigned long	t_eat;
 	unsigned long	t_sleep;
 	unsigned long	n_times_eat;
+	unsigned long	t_init;
 }	t_data;
 
 typedef struct

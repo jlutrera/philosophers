@@ -1,5 +1,5 @@
 #Files
-SRCS		=	$(wildcard *.c)
+SRCS		=	philo.c philo_utils.c
 
 # Sources and objects
 RM 			=	rm -rf
@@ -24,23 +24,23 @@ RESET		=	\e[0m
 all			:	$(NAME)
 
 %.o			:	%.c
-				@echo "$(BLUE)Compiling $@ ! $(RESET)\c"
+				@echo "Compiling $(BLUE)$@$(RESET) ... \c"
 				@$(CC) $(W_FLAGS) $(LIB) -c $< -o $@
-				@echo "... $(GREEN)OK$(RESET)" 
+				@echo "$(GREEN)OK !$(RESET)" 
 
 $(NAME) 	:	$(OBJS)           
-				@echo "$(YELLOW)Linking object files ! $(RESET)\c"
+				@echo "Linking object files ...\c"
 				@$(CC) $(OBJS) $(LEAKS) $(INCL)$(LIB) -o $(NAME)
-				@echo "$(GREEN)SUCCESS !$(RESET)"
-				@echo "$(NAME) created successfully !"
+				@echo "$(GREEN)OK !$(RESET)"
+				@echo "$(YELLOW)$(NAME) programme created successfully !$(RESET)"
 
 clean		:	
 				@$(RM) $(OBJS)
-				@echo "$(CYAN)Deleted all the object files$(RESET)"
+				@echo "All the object files $(RED)DELETED $(RESET)!"
 
 fclean		:	clean
 				@$(RM) $(NAME)
-				@echo "$(CYAN)Deleted all the exec files$(RESET)"
+				@echo "All files $(RED)DELETED $(RESET)!"
 
 re			:	fclean all
 
