@@ -39,7 +39,8 @@ void	ft_init_param(int c, char **v, t_param *param)
 	param->someone_dead = 0;
 }
 
-void	ft_init_data(t_philo **phi, pthread_mutex_t *forks, t_param *param)
+void	ft_init_data(t_philo **phi, pthread_mutex_t *forks,
+		pthread_mutex_t *message, t_param *param)
 {
 	int	i;
 
@@ -50,18 +51,23 @@ void	ft_init_data(t_philo **phi, pthread_mutex_t *forks, t_param *param)
 		(*phi)[i].times_eaten = 0;
 		(*phi)[i].id = i;
 		(*phi)[i].fork_left = &forks[i];
-		(*phi)[i].fork_right = &forks[(i + 1) % param->n];
+		if (param->n == 1)
+			(*phi)[i].fork_right = NULL;
+		else
+			(*phi)[i].fork_right = &forks[(i + 1) % param->n];
+		(*phi)[i].writing = message;
 		(*phi)[i].param = param;
 	}
 }
 
-void	ft_init_mutex(pthread_mutex_t *f, int n)
+void	ft_init_mutex(pthread_mutex_t *f, pthread_mutex_t *m, int n)
 {
 	int	i;
 
 	i = -1;
 	while (++i < n)
 		pthread_mutex_init(&f[i], NULL);
+	pthread_mutex_init(m, NULL);
 }
 
 //forks = los cerrojos = tenedores = filósofos
@@ -73,6 +79,7 @@ int	main(int argc, char **argv)
 	t_param			param;
 	pthread_t		*philos;
 	pthread_mutex_t	*forks;
+	pthread_mutex_t	message;
 
 	param.n = check_arguments(argc, argv);
 	if (param.n == 0)
@@ -88,8 +95,8 @@ int	main(int argc, char **argv)
 	if (!philos || !forks || !phi)
 		return (1);
 	ft_init_param(argc, argv, &param);
-	ft_init_data(&phi, forks, &param);
-	ft_init_mutex(forks, param.n);
+	ft_init_data(&phi, forks, &message, &param);
+	ft_init_mutex(forks, &message, param.n);
 	ft_init_threads(phi, philos);
 	ft_clean_memory(phi, forks, philos);
 	return (0);

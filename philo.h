@@ -44,6 +44,7 @@ typedef struct s_philo
 	unsigned long	last_meal;
 	pthread_mutex_t	*fork_left;
 	pthread_mutex_t	*fork_right;
+	pthread_mutex_t	*writing;
 	t_param			*param;
 }	t_philo;
 
@@ -52,5 +53,5 @@ size_t			ft_atou(const char *str);
 int				ft_error_arguments(void);
 int				check_arguments(int c, char **v);
 unsigned long	ft_get_time(void);
-void			ft_init_threads(t_philo *phi, pthread_t *philos);
+int				ft_init_threads(t_philo *phi, pthread_t *philos);
 #endif
