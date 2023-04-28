@@ -1,5 +1,5 @@
 #Files
-SRCS		=	philo.c philo_utils.c
+SRCS		=	philo.c philo_utils.c philosopher.c
 
 # Sources and objects
 RM 			=	rm -rf

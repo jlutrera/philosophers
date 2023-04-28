@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jutrera- <jutrera-@student.42madrid.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/28 10:31:50 by jutrera-          #+#    #+#             */
+/*   Updated: 2023/04/28 10:31:50 by jutrera-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PHILO_H
 # define PHILO_H
 
@@ -14,21 +26,25 @@
 # define GREEN 	"\e[32m"
 # define CYAN	"\e[36m"
 
-typedef struct
+typedef struct s_param
 {
-	unsigned long	t_die;
-	unsigned long	t_eat;
-	unsigned long	t_sleep;
-	unsigned long	n_times_eat;
-	unsigned long	t_init;
-}	t_data;
+	int				n;
+	int				someone_dead;
+	int				max_eaten;
+	unsigned long	until_die;
+	unsigned long	eating;
+	unsigned long	sleeping;
+	unsigned long	origin;
+}	t_param;
 
-typedef struct
-{
+typedef struct s_philo
+{	
 	int				id;
+	int				times_eaten;
+	unsigned long	last_meal;
 	pthread_mutex_t	*fork_left;
-	pthread_mutex_t *fork_right;
-	t_data			data_time;
+	pthread_mutex_t	*fork_right;
+	t_param			*param;
 }	t_philo;
 
 int				ft_strcmp(const char *s1, const char *s2);
@@ -36,4 +52,5 @@ size_t			ft_atou(const char *str);
 int				ft_error_arguments(void);
 int				check_arguments(int c, char **v);
 unsigned long	ft_get_time(void);
+void			ft_init_threads(t_philo *phi, pthread_t *philos);
 #endif
