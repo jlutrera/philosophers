@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.c                                            :+:      :+:    :+:   */
+/*   philo_main.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jutrera- <jutrera-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_inc.h"
 
 void	ft_clean_memory(t_philo *phi, pthread_mutex_t *forks, pthread_t *philos)
 {
@@ -39,7 +39,7 @@ void	ft_init_param(int c, char **v, t_param *param)
 	param->someone_dead = 0;
 }
 
-void	ft_init_data(t_philo **phi, pthread_mutex_t *forks,
+void	ft_init_philo(t_philo **phi, pthread_mutex_t *forks,
 		pthread_mutex_t *message, t_param *param)
 {
 	int	i;
@@ -58,20 +58,22 @@ void	ft_init_data(t_philo **phi, pthread_mutex_t *forks,
 		(*phi)[i].writing = message;
 		(*phi)[i].param = param;
 	}
-}
-
-void	ft_init_mutex(pthread_mutex_t *f, pthread_mutex_t *m, int n)
-{
-	int	i;
-
 	i = -1;
-	while (++i < n)
-		pthread_mutex_init(&f[i], NULL);
-	pthread_mutex_init(m, NULL);
+	while (++i < param->n)
+		pthread_mutex_init(&forks[i], NULL);
+	pthread_mutex_init(message, NULL);
 }
 
-//forks = los cerrojos = tenedores = filósofos
-//philos = los hilos =  número de filósofos = n
+static void	ft_print_table(void)
+{
+	printf("\n\n     %sPHILOSOPHERS BEGIN TO EAT, ", CYAN);
+	printf("SLEEP & THINK !%s      \n", NC);
+	printf("\u250c---------\u252c--------\u252c");
+	printf("-----------------------------\u2510\n");
+	printf("| Lap(ms) | Philo. |            Action           |\n");
+	printf("\u251c---------\u253c--------\u253c");
+	printf("-----------------------------\u2524\n");
+}
 
 int	main(int argc, char **argv)
 {
@@ -84,19 +86,14 @@ int	main(int argc, char **argv)
 	param.n = check_arguments(argc, argv);
 	if (param.n == 0)
 		return (ft_error_arguments());
-	printf("****************************************************\n");
-	printf("*                                                  *\n");
-	printf("*   Philosophers begin to eat, sleep and think !   *\n");
-	printf("*                                                  *\n");
-	printf("****************************************************\n");
 	phi = (t_philo *)malloc(param.n * sizeof(t_philo));
 	philos = (pthread_t *)malloc(param.n * sizeof(pthread_t));
 	forks = (pthread_mutex_t *)malloc(param.n * sizeof(pthread_mutex_t));
 	if (!philos || !forks || !phi)
 		return (1);
+	ft_print_table();
 	ft_init_param(argc, argv, &param);
-	ft_init_data(&phi, forks, &message, &param);
-	ft_init_mutex(forks, &message, param.n);
+	ft_init_philo(&phi, forks, &message, &param);
 	ft_init_threads(phi, philos);
 	ft_clean_memory(phi, forks, philos);
 	return (0);
