@@ -40,19 +40,6 @@ unsigned long	ft_atou(const char *str)
 	return (result);
 }
 
-int	ft_error_arguments(void)
-{
-	printf("Bad arguments number. Type:\n");
-	printf("    %sarg1:%s number of philosophers.\n", CYAN, NC);
-	printf("    %sarg2:%s time to survive without ", CYAN, NC);
-	printf("eating (in milisec).\n");
-	printf("    %sarg3:%s timme eating (in milisec).\n", CYAN, NC);
-	printf("    %sarg4:%s time sleeping (in milisec).\n", CYAN, NC);
-	printf("    %sarg5:%s The program will stop if all ", CYAN, NC);
-	printf("philosophers eat this number (OPTIONAL).\n");
-	return (1);
-}
-
 int	check_arguments(int c, char **v)
 {
 	int	i;

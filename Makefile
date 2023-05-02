@@ -1,5 +1,5 @@
 #Files
-SRCS		=	philo_main.c philo_utils.c philo_life.c
+SRCS		=	philo_main.c philo_utils.c philo_life.c philo_msg.c
 
 # Sources and objects
 RM 			=	rm -rf
@@ -9,6 +9,7 @@ HEADER		=	philo.h
 # Constant strings
 NAME		=	philo
 INCL		=	-I$(HEADER)
+#LEAKS		=	-g3 -fsanitize=thread
 LEAKS		=	-g3 -fsanitize=address
 LIB			=	-pthread
 W_FLAGS		=	-Wall -Wextra -Werror
