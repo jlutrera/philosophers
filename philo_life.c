@@ -26,23 +26,26 @@ static void	ft_msg(char *s, t_param *param, t_philo *phi)
 	unsigned long	now;
 
 	pthread_mutex_lock(&(param->writing));
-	now = ft_get_time() - param->origin;
-	printf("|%s%8li%s ", YELLOW, now, NC);
-	printf("| %s%6d%s ", GREEN, phi->id + 1, NC);
-	printf("| %s", s);
-	if (ft_strcmp("has taken the fork right 🍴 |\n", s) == 0)
+	if (!(param->someone_dead))
 	{
-		(phi->times_eaten)++;
+		now = ft_get_time() - param->origin;
 		printf("|%s%8li%s ", YELLOW, now, NC);
-		printf("| %s%6d%s | is eating - ", GREEN, phi->id + 1, NC);
-		printf("%s%3d%s          🍝 |\n", YELLOW, phi->times_eaten, NC);
+		printf("| %s%6d%s ", GREEN, phi->id + 1, NC);
+		printf("| %s\n", s);
+		if (ft_strcmp("has taken the fork right 🍴 |", s) == 0)
+		{
+			(phi->times_eaten)++;
+			printf("|%s%8li%s ", YELLOW, now, NC);
+			printf("| %s%6d%s | is eating - ", GREEN, phi->id + 1, NC);
+			printf("%s%3d%s          🍝 |\n", YELLOW, phi->times_eaten, NC);
+		}
 	}
 	pthread_mutex_unlock(&(param->writing));
 }
 
 static int	dead_checker(t_philo *phi, t_param *param)
 {
-	int	i;
+	int				i;
 
 	while (!(param->all_ate))
 	{
@@ -52,7 +55,7 @@ static int	dead_checker(t_philo *phi, t_param *param)
 			pthread_mutex_lock(&(param->dc));
 			if (ft_get_time() - phi[i].last_meal >= param->until_die)
 			{
-				ft_msg("is dead                  💀 |\n", param, &(phi[i]));
+				ft_msg("is dead                  💀 |", param, &(phi[i]));
 				param->someone_dead = 1;
 			}	
 			pthread_mutex_unlock(&(param->dc));
@@ -76,18 +79,18 @@ static void	*life(void *arg)
 	phi = (t_philo *)arg;
 	while (!(phi->param->someone_dead))
 	{
-		ft_msg("is thinking              💭 |\n", phi->param, phi);
+		ft_msg("is thinking              💭 |", phi->param, phi);
 		pthread_mutex_lock(phi->fork_left);
-		ft_msg("has taken the fork left  🍴 |\n", phi->param, phi);
+		ft_msg("has taken the fork left  🍴 |", phi->param, phi);
 		pthread_mutex_lock(phi->fork_right);
-		ft_msg("has taken the fork right 🍴 |\n", phi->param, phi);
+		ft_msg("has taken the fork right 🍴 |", phi->param, phi);
 		phi->last_meal = ft_get_time();
 		ft_msleep(phi->param->eating);
 		pthread_mutex_unlock(phi->fork_left);
 		pthread_mutex_unlock(phi->fork_right);
 		if (phi->param->all_ate)
 			break ;
-		ft_msg("is sleeping              🌙 |\n", phi->param, phi);
+		ft_msg("is sleeping              🌙 |", phi->param, phi);
 		ft_msleep(phi->param->sleeping);
 	}
 	return (NULL);
@@ -101,18 +104,18 @@ int	ft_init_threads(t_philo *phi, pthread_t *philos)
 
 	i = -1;
 	param = phi[0].param;
+	param->origin = ft_get_time();
 	while (++i < param->n)
 	{
-		param->origin = ft_get_time();
 		if (pthread_create(&philos[i], NULL, life, &(phi[i])))
 			return (1);
-		phi[i].last_meal = ft_get_time();
-		usleep(100);
+		phi[i].last_meal = param->origin;
+		usleep(50);
 	}
 	status = dead_checker(phi, param);
 	i = -1;
 	while (++i < param->n)
 		pthread_join(philos[i], NULL);
-	ft_print_end_table(status, param->max_eaten);
+	ft_print_bottom_table(status, param->max_eaten);
 	return (0);
 }

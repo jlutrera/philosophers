@@ -57,5 +57,6 @@ int				check_arguments(int c, char **v);
 unsigned long	ft_get_time(void);
 int				ft_init_threads(t_philo *phi, pthread_t *philos);
 int				message_one_philo(unsigned long n);
-void			ft_print_end_table(int status, int meals);
+void			ft_print_bottom_table(int status, int meals);
+void			ft_print_head_table(void);
 #endif

@@ -81,7 +81,7 @@ int	main(int argc, char **argv)
 	if (!philos || !forks || !phi)
 		return (1);
 	ft_init_philo(&phi, &param, forks);
-	ft_print_table();
+	ft_print_head_table();
 	ft_init_threads(phi, philos);
 	ft_clean_memory(phi, forks, philos, param);
 	return (0);

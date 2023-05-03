@@ -21,7 +21,7 @@ int	message_one_philo(unsigned long n)
 	return (0);
 }
 
-void	ft_print_table(void)
+void	ft_print_head_table(void)
 {
 	printf("\n\n     %sPHILOSOPHERS BEGIN TO EAT, ", CYAN);
 	printf("SLEEP & THINK !%s      \n", NC);
@@ -45,14 +45,13 @@ int	ft_error_arguments(void)
 	return (1);
 }
 
-void	ft_print_end_table(int status, int meals)
+void	ft_print_bottom_table(int status, int meals)
 {
 	printf("\u2514---------\u2534--------");
 	printf("\u2534-----------------------------\u2518\n");
 	if (status)
 	{
 		printf("\n  %sALL PHILOSOPHERS HAVE EATEN ", CYAN);
-		printf("%s%i%s ", YELLOW, meals, CYAN);
-		printf("TIMES AT LEAST ! %s\n\n", NC);
+		printf("AT LEAST %s%i%s TIMES%s\n", YELLOW, meals, CYAN, NC);
 	}
 }
