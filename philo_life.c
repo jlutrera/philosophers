@@ -12,6 +12,20 @@
 
 #include "philo_inc.h"
 
+static void	ft_clean_memory(t_philo *phi, pthread_t *philos, t_param param)
+{
+	int	i;
+
+	i = -1;
+	while (++i < param.n)
+		pthread_mutex_destroy(&param.forks[i]);
+	pthread_mutex_destroy(&(param.writing));
+	pthread_mutex_destroy(&(param.dc));
+	free(philos);
+	free(param.forks);
+	free(phi);
+}
+
 static void	ft_msleep(unsigned long time)
 {
 	unsigned long	i;
@@ -80,14 +94,14 @@ static void	*life(void *arg)
 	while (!(phi->param->someone_dead))
 	{
 		ft_msg("is thinking              💭 |", phi->param, phi);
-		pthread_mutex_lock(phi->fork_left);
+		pthread_mutex_lock(&(phi->param->forks[phi->fork_left]));
 		ft_msg("has taken the fork left  🍴 |", phi->param, phi);
-		pthread_mutex_lock(phi->fork_right);
+		pthread_mutex_lock(&(phi->param->forks[phi->fork_right]));
 		ft_msg("has taken the fork right 🍴 |", phi->param, phi);
 		phi->last_meal = ft_get_time();
 		ft_msleep(phi->param->eating);
-		pthread_mutex_unlock(phi->fork_left);
-		pthread_mutex_unlock(phi->fork_right);
+		pthread_mutex_unlock(&(phi->param->forks[phi->fork_left]));
+		pthread_mutex_unlock(&(phi->param->forks[phi->fork_right]));
 		if (phi->param->all_ate)
 			break ;
 		ft_msg("is sleeping              🌙 |", phi->param, phi);
@@ -98,10 +112,14 @@ static void	*life(void *arg)
 
 int	ft_init_threads(t_philo *phi, pthread_t *philos)
 {
-	int		i;
-	int		status;
-	t_param	*param;
+	int				i;
+	int				status;
+	t_param			*param;
+	pthread_t		*philos;
 
+	philos = (pthread_t *)malloc(param.n * sizeof(pthread_t));
+	if (!philos)
+		return (1);
 	i = -1;
 	param = phi[0].param;
 	param->origin = ft_get_time();

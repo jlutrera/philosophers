@@ -36,6 +36,7 @@ typedef struct s_param
 	unsigned long	eating;
 	unsigned long	sleeping;
 	unsigned long	origin;
+	pthread_mutex_t	*forks;
 	pthread_mutex_t	writing;
 	pthread_mutex_t	dc;
 }	t_param;
@@ -45,15 +46,14 @@ typedef struct s_philo
 	int				id;
 	int				times_eaten;
 	unsigned long	last_meal;
-	pthread_mutex_t	*fork_left;
-	pthread_mutex_t	*fork_right;
+	int				fork_left;
+	int				fork_right;
 	t_param			*param;
 }	t_philo;
 
 int				ft_strcmp(const char *s1, const char *s2);
 size_t			ft_atou(const char *str);
 int				ft_error_arguments(void);
-int				check_arguments(int c, char **v);
 unsigned long	ft_get_time(void);
 int				ft_init_threads(t_philo *phi, pthread_t *philos);
 int				message_one_philo(unsigned long n);

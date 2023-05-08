@@ -40,19 +40,6 @@ unsigned long	ft_atou(const char *str)
 	return (result);
 }
 
-int	check_arguments(int c, char **v)
-{
-	int	i;
-
-	if (c != 5 && c != 6)
-		return (0);
-	i = 0;
-	while (++i < c)
-		if (ft_atou(v[i]) == 0 && ft_strcmp(v[i], "0") != 0)
-			return (0);
-	return (ft_atou(v[1]));
-}
-
 unsigned long	ft_get_time(void)
 {
 	struct timeval	tv;

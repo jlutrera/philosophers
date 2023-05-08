@@ -12,23 +12,26 @@
 
 #include "philo_inc.h"
 
-static void	ft_clean_memory(t_philo *phi, pthread_mutex_t *forks,
-		pthread_t *philos, t_param param)
+static int	args_are_good(int c, char **v)
 {
 	int	i;
 
-	i = -1;
-	while (++i < param.n)
-		pthread_mutex_destroy(&forks[i]);
-	pthread_mutex_destroy(&(param.writing));
-	pthread_mutex_destroy(&(param.dc));
-	free(philos);
-	free(forks);
-	free(phi);
+	if (c != 5 && c != 6)
+		return (1);
+	i = 0;
+	while (++i < c)
+		if (ft_atou(v[i]) == 0)
+			return (1);
+	return (0);
 }
 
-static void	ft_init_param(int c, char **v, t_param *param)
+static int	ft_init_param(int c, char **v, t_param *param)
 {
+	int	i;
+
+	if (args_are_good(c, v))
+		return (1);
+	param->n = ft_atou(v[1]);
 	param->until_die = ft_atou(v[2]);
 	param->eating = ft_atou(v[3]);
 	param->sleeping = ft_atou(v[4]);
@@ -38,51 +41,51 @@ static void	ft_init_param(int c, char **v, t_param *param)
 		param->max_eaten = -1;
 	param->someone_dead = 0;
 	param->all_ate = 0;
+	param->forks = (pthread_mutex_t *)malloc(param->n * sizeof(pthread_mutex_t));
+	if (!param->forks)
+		return (1);
+	i = -1;
+	while (++i < param->n)
+		pthread_mutex_init(&param->forks[i], NULL);
+	pthread_mutex_init(&(param->writing), NULL);
+	pthread_mutex_init(&(param->dc), NULL);
+	return (0);
 }
 
-static void	ft_init_philo(t_philo **philos, t_param *param,
-		pthread_mutex_t *forks)
+static int	ft_init_philo(t_philo **phi, t_param *param)
 {
-	int	i;
+	int		i;
+	t_philo	*p;
 
+	p = (t_philo *)malloc(param->n * sizeof(t_philo));
+	if (!p)
+		return (1);
 	i = -1;
 	while (++i < param->n)
 	{
-		(*philos)[i].last_meal = 0;
-		(*philos)[i].times_eaten = 0;
-		(*philos)[i].id = i;
-		(*philos)[i].fork_left = &forks[i];
-		(*philos)[i].fork_right = &forks[(i + 1) % param->n];
-		(*philos)[i].param = param;
+		p[i].last_meal = 0;
+		p[i].times_eaten = 0;
+		p[i].id = i;
+		p[i].fork_left = i;
+		p[i].fork_right = (i + 1) % param->n;
+		p[i].param = param;
 	}
-	i = -1;
-	while (++i < param->n)
-		pthread_mutex_init(&forks[i], NULL);
-	pthread_mutex_init(&(param->writing), NULL);
-	pthread_mutex_init(&(param->dc), NULL);
+	*phi = p;
+	return (0);
 }
 
 int	main(int argc, char **argv)
 {
-	t_philo			*phi;
+	t_philo			*phi = NULL;
 	t_param			param;
-	pthread_t		*philos;
-	pthread_mutex_t	*forks;
 
-	param.n = check_arguments(argc, argv);
-	if (param.n == 0)
+	if (ft_init_param(argc, argv, &param))
 		return (ft_error_arguments());
-	ft_init_param(argc, argv, &param);
 	if (param.n == 1)
 		return (message_one_philo(param.until_die));
-	phi = (t_philo *)malloc(param.n * sizeof(t_philo));
-	philos = (pthread_t *)malloc(param.n * sizeof(pthread_t));
-	forks = (pthread_mutex_t *)malloc(param.n * sizeof(pthread_mutex_t));
-	if (!philos || !forks || !phi)
-		return (1);
-	ft_init_philo(&phi, &param, forks);
+	ft_init_philo(&phi, &param);
 	ft_print_head_table();
-	ft_init_threads(phi, philos);
-	ft_clean_memory(phi, forks, philos, param);
+	ft_init_threads(phi);
+	ft_clean_memory(phi, param);
 	return (0);
 }
