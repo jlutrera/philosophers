@@ -28,16 +28,27 @@ int	ft_strcmp(const char *s1, const char *s2)
 		return (-1);
 }
 
-unsigned long	ft_atou(const char *str)
+int	ft_atoi(const char *str)
 {
-	unsigned long	result;
-	int				i;
+	long int	n;
+	int			sign;
 
-	result = 0;
-	i = -1;
-	while (str[++i] && str[i] >= 48 && str[i] <= 57)
-		result = result * 10 + str[i] - 48;
-	return (result);
+	n = 0;
+	sign = 1;
+	while ((*str <= 13 && *str >= 9) || *str == 32)
+		str++;
+	if (*str == '-')
+		return (-1);
+	else if (*str == '+')
+		str++;
+	while (*str)
+	{
+		if (*str >= '0' && *str <= '9')
+			n = n * 10 + (*str++ - '0');
+		else
+			return (-1);
+	}
+	return ((int)(n * sign));
 }
 
 unsigned long	ft_get_time(void)
@@ -46,4 +57,13 @@ unsigned long	ft_get_time(void)
 
 	gettimeofday(&tv, NULL);
 	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
+}
+
+void	ft_msleep(unsigned long time)
+{
+	unsigned long	i;
+
+	i = ft_get_time();
+	while (ft_get_time() - i < time)
+		usleep(50);
 }

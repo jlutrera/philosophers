@@ -12,7 +12,7 @@
 
 #include "philo_inc.h"
 
-static int	args_are_good(int c, char **v)
+static int	args_arent_good(int c, char **v)
 {
 	int	i;
 
@@ -20,7 +20,7 @@ static int	args_are_good(int c, char **v)
 		return (1);
 	i = 0;
 	while (++i < c)
-		if (ft_atou(v[i]) == 0)
+		if (ft_atoi(v[i]) < 1)
 			return (1);
 	return (0);
 }
@@ -29,26 +29,28 @@ static int	ft_init_param(int c, char **v, t_param *param)
 {
 	int	i;
 
-	if (args_are_good(c, v))
+	if (args_arent_good(c, v))
 		return (1);
-	param->n = ft_atou(v[1]);
-	param->until_die = ft_atou(v[2]);
-	param->eating = ft_atou(v[3]);
-	param->sleeping = ft_atou(v[4]);
+	param->n = ft_atoi(v[1]);
+	param->until_die = ft_atoi(v[2]);
+	param->eating = ft_atoi(v[3]);
+	param->sleeping = ft_atoi(v[4]);
+	param->max_eaten = -1;
 	if (c == 6)
-		param->max_eaten = ft_atou(v[5]);
-	else
-		param->max_eaten = -1;
+		param->max_eaten = ft_atoi(v[5]);
 	param->someone_dead = 0;
 	param->all_ate = 0;
-	param->forks = (pthread_mutex_t *)malloc(param->n * sizeof(pthread_mutex_t));
+	param->forks = (pthread_mutex_t *)malloc(param->n
+			* sizeof(pthread_mutex_t));
 	if (!param->forks)
 		return (1);
 	i = -1;
 	while (++i < param->n)
-		pthread_mutex_init(&param->forks[i], NULL);
-	pthread_mutex_init(&(param->writing), NULL);
-	pthread_mutex_init(&(param->dc), NULL);
+		if (pthread_mutex_init(&param->forks[i], NULL))
+			return (1);
+	if (pthread_mutex_init(&(param->writing), NULL)
+		|| pthread_mutex_init(&(param->dc), NULL))
+		return (1);
 	return (0);
 }
 
@@ -76,16 +78,15 @@ static int	ft_init_philo(t_philo **phi, t_param *param)
 
 int	main(int argc, char **argv)
 {
-	t_philo			*phi = NULL;
+	t_philo			*phi;
 	t_param			param;
 
+	phi = NULL;
 	if (ft_init_param(argc, argv, &param))
 		return (ft_error_arguments());
 	if (param.n == 1)
-		return (message_one_philo(param.until_die));
-	ft_init_philo(&phi, &param);
-	ft_print_head_table();
-	ft_init_threads(phi);
-	ft_clean_memory(phi, param);
-	return (0);
+		return (ft_one_philo(param.until_die));
+	if (ft_init_philo(&phi, &param))
+		return (1);
+	return (ft_init_threads(phi));
 }

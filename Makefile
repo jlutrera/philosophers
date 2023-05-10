@@ -4,7 +4,7 @@ SRCS		=	philo_main.c philo_utils.c philo_life.c philo_msg.c
 # Sources and objects
 RM 			=	rm -rf
 OBJS		=	$(SRCS:.c=.o)
-HEADER		=	philo.h
+HEADER		=	philo_inc.h
 
 # Constant strings
 NAME		=	philo
@@ -12,7 +12,7 @@ INCL		=	-I$(HEADER)
 #LEAKS		=	-g3 -fsanitize=thread
 LEAKS		=	-g3 -fsanitize=address
 LIB			=	-pthread
-W_FLAGS		=	-Wall -Wextra -Werror
+W_FLAGS		=	-Wall -Wextra -Werror -pedantic
 
 #  Colors
 CYAN		=	\033[0;36m
@@ -25,12 +25,12 @@ RESET		=	\033[0m
 # Rules
 all			:	$(NAME)
 
-%.o			:	%.c
+%.o			:	%.c $(HEADER)
 				@echo "Compiling $(BLUE)$@$(RESET) ... \c"
 				@$(CC) $(W_FLAGS) $(LIB) -c $< -o $@
 				@echo "$(GREEN)OK !$(RESET)" 
 
-$(NAME) 	:	$(OBJS)           
+$(NAME) 	:	$(OBJS)       
 				@echo "Linking object files ...\c"
 				@$(CC) $(OBJS) $(LEAKS) $(INCL)$(LIB) -o $(NAME)
 				@echo "$(GREEN)OK !$(RESET)"
@@ -38,11 +38,11 @@ $(NAME) 	:	$(OBJS)
 
 clean		:	
 				@$(RM) $(OBJS)
-				@echo "All the object files $(RED)DELETED $(RESET)!"
+				@echo "Object files $(RED)DELETED $(RESET)!"
 
 fclean		:	clean
 				@$(RM) $(NAME)
-				@echo "All files $(RED)DELETED $(RESET)!"
+				@echo "Binary files $(RED)DELETED $(RESET)!"
 
 re			:	fclean all
 

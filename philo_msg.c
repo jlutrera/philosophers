@@ -12,12 +12,12 @@
 
 #include "philo_inc.h"
 
-int	message_one_philo(unsigned long n)
+int	ft_one_philo(int n)
 {
 	usleep(n * 1000);
 	printf("One philosopher can't eat with one fork, ");
 	printf("so it's dead (💀) in ");
-	printf("%s%li%s msec.\n", YELLOW, n, NC);
+	printf("%s%i%s msec.\n", YELLOW, n, NC);
 	return (0);
 }
 
@@ -34,7 +34,8 @@ void	ft_print_head_table(void)
 
 int	ft_error_arguments(void)
 {
-	printf("Bad arguments number. Type:\n");
+	printf("Bad arguments !. Type:");
+	printf("   %s./philo %sarg1 arg2 arg3 arg4 [arg5]%s\n", YELLOW, CYAN, NC);
 	printf("    %sarg1:%s number of philosophers.\n", CYAN, NC);
 	printf("    %sarg2:%s time to survive without ", CYAN, NC);
 	printf("eating (in milisec).\n");

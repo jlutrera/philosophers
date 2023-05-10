@@ -20,11 +20,17 @@
 # include <sys/time.h>
 # include <limits.h>
 
-# define NC 	"\e[0m"
-# define YELLOW "\e[33m"
-# define RED 	"\e[31m"
-# define GREEN 	"\e[32m"
-# define CYAN	"\e[36m"
+# define NC 	"\033[0;0m"
+# define YELLOW "\033[0;33m"
+# define RED 	"\033[0;31m"
+# define GREEN 	"\033[0;32m"
+# define CYAN	"\033[0;36m"
+
+# define DEAD_MSG	"is dead                  💀 |"
+# define THINK_MSG	"is thinking              💭 |"
+# define SLEEP_MSG	"is sleeping              🌙 |"
+# define F_L_MSG	"has taken the fork left  🍴 |"
+# define F_R_MSG	"has taken the fork right 🍴 |"
 
 typedef struct s_param
 {
@@ -32,9 +38,9 @@ typedef struct s_param
 	int				someone_dead;
 	int				max_eaten;
 	int				all_ate;
-	unsigned long	until_die;
-	unsigned long	eating;
-	unsigned long	sleeping;
+	int				until_die;
+	int				eating;
+	int				sleeping;
 	unsigned long	origin;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	writing;
@@ -51,12 +57,17 @@ typedef struct s_philo
 	t_param			*param;
 }	t_philo;
 
+//************* philo_utils.c *****************
 int				ft_strcmp(const char *s1, const char *s2);
-size_t			ft_atou(const char *str);
-int				ft_error_arguments(void);
+int				ft_atoi(const char *str);
 unsigned long	ft_get_time(void);
-int				ft_init_threads(t_philo *phi, pthread_t *philos);
-int				message_one_philo(unsigned long n);
+void			ft_msleep(unsigned long time);
+//************* philo_msg.c *******************
+int				ft_error_arguments(void);
+int				ft_one_philo(int n);
 void			ft_print_bottom_table(int status, int meals);
 void			ft_print_head_table(void);
+//************* philo_life.c ******************
+int				ft_init_threads(t_philo *phi);
+
 #endif
