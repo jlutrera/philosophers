@@ -1,10 +1,10 @@
 #Files
-SRCS		=	philo_main.c philo_utils.c philo_life.c philo_msg.c
+SRCS		=	main.c utils.c life.c messages.c
 
 # Sources and objects
 RM 			=	rm -rf
 OBJS		=	$(SRCS:.c=.o)
-HEADER		=	philo_inc.h
+HEADER		=	philo.h
 
 # Constant strings
 NAME		=	philo

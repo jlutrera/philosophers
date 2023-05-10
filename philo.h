@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_inc.h                                        :+:      :+:    :+:   */
+/*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jutrera- <jutrera-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_INC_H
-# define PHILO_INC_H
+#ifndef PHILO_H
+# define PHILO_H
 
 # include <stdio.h>
 # include <stdlib.h>
@@ -57,17 +57,17 @@ typedef struct s_philo
 	t_param			*param;
 }	t_philo;
 
-//************* philo_utils.c *****************
+//************* utils.c *****************
 int				ft_strcmp(const char *s1, const char *s2);
 int				ft_atoi(const char *str);
 unsigned long	ft_get_time(void);
 void			ft_msleep(unsigned long time);
-//************* philo_msg.c *******************
+//************* messages.c *******************
 int				ft_error_arguments(void);
 int				ft_one_philo(int n);
 void			ft_print_bottom_table(int status, int meals);
 void			ft_print_head_table(void);
-//************* philo_life.c ******************
+//************* life.c ******************
 int				ft_init_threads(t_philo *phi);
 
 #endif
