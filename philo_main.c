@@ -33,6 +33,8 @@ static int	ft_init_param(int c, char **v, t_param *param)
 		return (1);
 	param->n = ft_atoi(v[1]);
 	param->until_die = ft_atoi(v[2]);
+	if (param->n == 1)
+		return (0);
 	param->eating = ft_atoi(v[3]);
 	param->sleeping = ft_atoi(v[4]);
 	param->max_eaten = -1;
@@ -46,11 +48,9 @@ static int	ft_init_param(int c, char **v, t_param *param)
 		return (1);
 	i = -1;
 	while (++i < param->n)
-		if (pthread_mutex_init(&param->forks[i], NULL))
-			return (1);
-	if (pthread_mutex_init(&(param->writing), NULL)
-		|| pthread_mutex_init(&(param->dc), NULL))
-		return (1);
+		pthread_mutex_init(&param->forks[i], NULL);
+	pthread_mutex_init(&(param->writing), NULL);
+	pthread_mutex_init(&(param->dc), NULL);
 	return (0);
 }
 
