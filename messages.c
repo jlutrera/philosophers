@@ -12,15 +12,6 @@
 
 #include "philo.h"
 
-int	ft_one_philo(int n)
-{
-	usleep(n * 1000);
-	printf("One philosopher can't eat with one fork, ");
-	printf("so it's dead (💀) in ");
-	printf("%s%i%s msec.\n", YELLOW, n, NC);
-	return (0);
-}
-
 void	ft_print_head_table(void)
 {
 	printf("\n\n     %sPHILOSOPHERS BEGIN TO EAT, ", CYAN);
@@ -32,18 +23,21 @@ void	ft_print_head_table(void)
 	printf("-----------------------------\u2524\n");
 }
 
-int	ft_error_arguments(void)
+int	ft_error_arguments(int err)
 {
-	printf("Bad arguments !. Type:");
-	printf("   %s./philo %sarg1 arg2 arg3 arg4 [arg5]%s\n", YELLOW, CYAN, NC);
-	printf("    %sarg1:%s number of philosophers.\n", CYAN, NC);
-	printf("    %sarg2:%s time to survive without ", CYAN, NC);
-	printf("eating (in milisec).\n");
-	printf("    %sarg3:%s timme eating (in milisec).\n", CYAN, NC);
-	printf("    %sarg4:%s time sleeping (in milisec).\n", CYAN, NC);
-	printf("    %sarg5:%s The program will stop if all ", CYAN, NC);
-	printf("philosophers eat this number (OPTIONAL).\n");
-	return (1);
+	if (err == 1)
+		printf("Mutex error !\n");
+	else if (err == 2)
+		printf("Bad argument value(s) !\n");
+	else if (err == 3)
+		printf("Malloc error !\n");
+	else if (err == 4)
+		printf("Bad number arguments !\n");
+	else if (err == 5)
+		printf("One philosopher always dead (💀)\n");
+	else if (err == 6)
+		printf("Error creating threads !\n");
+	return (err);
 }
 
 void	ft_print_bottom_table(int status, int meals)
@@ -52,7 +46,7 @@ void	ft_print_bottom_table(int status, int meals)
 	printf("\u2534-----------------------------\u2518\n");
 	if (status)
 	{
-		printf("\n  %sALL PHILOSOPHERS HAVE EATEN ", CYAN);
-		printf("AT LEAST %s%i%s TIMES%s\n", YELLOW, meals, CYAN, NC);
+		printf("  %sALL PHILOSOPHERS HAVE EATEN ", CYAN);
+		printf("AT LEAST %s%i%s TIMES%s\n\n", YELLOW, meals, CYAN, NC);
 	}
 }

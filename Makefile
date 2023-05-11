@@ -1,14 +1,14 @@
 #Files
 SRCS		=	main.c utils.c life.c messages.c
+HEADER		=	philo.h
 
 # Sources and objects
-RM 			=	rm -rf
 OBJS		=	$(SRCS:.c=.o)
-HEADER		=	philo.h
 
 # Constant strings
 NAME		=	philo
-INCL		=	-I$(HEADER)
+CC			=	gcc
+RM 			=	rm -rf
 #LEAKS		=	-g3 -fsanitize=thread
 LEAKS		=	-g3 -fsanitize=address
 LIB			=	-pthread
@@ -32,7 +32,7 @@ all			:	$(NAME)
 
 $(NAME) 	:	$(OBJS)       
 				@echo "Linking object files ...\c"
-				@$(CC) $(OBJS) $(LEAKS) $(INCL)$(LIB) -o $(NAME)
+				@$(CC) $(OBJS) $(LEAKS) -I$(HEADER)$(LIB) -o $(NAME)
 				@echo "$(GREEN)OK !$(RESET)"
 				@echo "$(YELLOW)$(NAME) programme created successfully !$(RESET)"
 

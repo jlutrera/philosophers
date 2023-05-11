@@ -12,7 +12,7 @@
 
 #include "philo.h"
 
-static void	ft_clean_memory(t_philo *phi, t_param *param)
+static int	ft_clean_memory(t_philo *phi, t_param *param, pthread_t	*philos)
 {
 	int	i;
 
@@ -23,6 +23,8 @@ static void	ft_clean_memory(t_philo *phi, t_param *param)
 	pthread_mutex_destroy(&(param->dc));
 	free(param->forks);
 	free(phi);
+	free(philos);
+	return (0);
 }
 
 static int	ft_msg(char *s, t_param *param, t_philo *phi)
@@ -40,8 +42,8 @@ static int	ft_msg(char *s, t_param *param, t_philo *phi)
 		{
 			(phi->times_eaten)++;
 			printf("|%s%8li%s ", YELLOW, now, NC);
-			printf("| %s%6d%s | is eating - ", GREEN, phi->id + 1, NC);
-			printf("%s%3d%s          🍝 |\n", YELLOW, phi->times_eaten, NC);
+			printf("| %s%6d%s ", GREEN, phi->id + 1, NC);
+			printf("| %s %s%i%s\n", EATING, YELLOW, phi->times_eaten, NC);
 		}
 	}
 	pthread_mutex_unlock(&(param->writing));
@@ -111,12 +113,13 @@ int	ft_init_threads(t_philo *phi)
 	param = phi[0].param;
 	philos = (pthread_t *)malloc(param->n * sizeof(pthread_t));
 	if (!philos)
-		return (1);
+		return (3);
 	i = -1;
 	param->origin = ft_get_time();
 	while (++i < param->n)
 	{
-		pthread_create(&philos[i], NULL, life, &(phi[i]));
+		if (pthread_create(&philos[i], NULL, life, &(phi[i])))
+			return (6);
 		phi[i].last_meal = param->origin;
 		usleep(50);
 	}
@@ -125,6 +128,5 @@ int	ft_init_threads(t_philo *phi)
 	while (++i < param->n)
 		pthread_join(philos[i], NULL);
 	ft_print_bottom_table(status, param->max_eaten);
-	ft_clean_memory(phi, param);
-	return (free(philos), 0);
+	return (ft_clean_memory(phi, param, philos));
 }
