@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jutrera- <jutrera-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: jutrera- <jutrera-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 10:31:50 by jutrera-          #+#    #+#             */
-/*   Updated: 2023/04/28 10:31:50 by jutrera-         ###   ########.fr       */
+/*   Updated: 2023/05/13 20:40:42 by jutrera-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 # define SLEEP_MSG	"is sleeping              🌙 |"
 # define F_L_MSG	"has taken the fork left  🍴 |"
 # define F_R_MSG	"has taken the fork right 🍴 |"
-# define EATING		"is eating                🍝 |"
+# define EATING_MSG	"is eating                🍝 |"
 
 typedef struct s_param
 {
@@ -64,10 +64,15 @@ int				ft_atoi(const char *str);
 unsigned long	ft_get_time(void);
 void			ft_msleep(unsigned long time);
 //************* messages.c *******************
-int				ft_error_arguments(int err);
+int				ft_error_arguments(int err, t_param param);
 void			ft_print_bottom_table(int status, int meals);
 void			ft_print_head_table(void);
 //************* life.c ******************
 int				ft_init_threads(t_philo *phi);
+//************* life_utils.c ************
+int				is_someone_dead(t_philo *phi);
+int				check_all_eaten(t_philo *phi);
+void			ft_update(t_philo *phi);
+int				is_all_eaten(t_philo *phi);
 
 #endif

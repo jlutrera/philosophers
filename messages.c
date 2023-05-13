@@ -6,7 +6,7 @@
 /*   By: jutrera- <jutrera-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 23:32:20 by jutrera-          #+#    #+#             */
-/*   Updated: 2023/05/13 15:20:32 by jutrera-         ###   ########.fr       */
+/*   Updated: 2023/05/13 20:07:22 by jutrera-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	ft_print_head_table(void)
 	printf("-----------------------------\u253c-------\u2524\n");
 }
 
-int	ft_error_arguments(int err)
+int	ft_error_arguments(int err, t_param param)
 {
 	if (err == 1)
 		printf("Mutex error !\n");
@@ -34,9 +34,11 @@ int	ft_error_arguments(int err)
 	else if (err == 4)
 		printf("Bad number arguments !\n");
 	else if (err == 5)
-		printf("One philosopher always dies (💀)\n");
-	else if (err == 6)
-		printf("Error creating threads !\n");
+	{
+		printf("The philosopher will die in %i msec...", param.until_die);
+		usleep(param.until_die * 1000);
+		printf("(💀)\n");
+	}		
 	return (err);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jutrera- <jutrera-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: jutrera- <jutrera-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 10:20:36 by jutrera-          #+#    #+#             */
-/*   Updated: 2023/04/28 10:20:36 by jutrera-         ###   ########.fr       */
+/*   Updated: 2023/05/13 20:07:41 by jutrera-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ static int	ft_init_param(int c, char **v, t_param *param)
 	if (e)
 		return (e);
 	param->n = ft_atoi(v[1]);
+	param->until_die = ft_atoi(v[2]);
 	if (param->n == 1)
 		return (5);
-	param->until_die = ft_atoi(v[2]);
 	param->eating = ft_atoi(v[3]);
 	param->sleeping = ft_atoi(v[4]);
 	param->max_eaten = -1;
@@ -57,8 +57,7 @@ static int	ft_init_param(int c, char **v, t_param *param)
 		param->max_eaten = ft_atoi(v[5]);
 	param->someone_dead = 0;
 	param->all_ate = 0;
-	param->forks = (pthread_mutex_t *)malloc(param->n
-			* sizeof(pthread_mutex_t));
+	param->forks = malloc(param->n * sizeof(pthread_mutex_t));
 	if (!param->forks)
 		return (3);
 	return (ft_init_mutex(param));
@@ -69,7 +68,7 @@ static int	ft_init_philo(t_philo **phi, t_param *param)
 	int		i;
 	t_philo	*p;
 
-	p = (t_philo *)malloc(param->n * sizeof(t_philo));
+	p = malloc(param->n * sizeof(t_philo));
 	if (!p)
 		return (3);
 	i = -1;
@@ -95,12 +94,12 @@ int	main(int argc, char **argv)
 	phi = NULL;
 	err = ft_init_param(argc, argv, &param);
 	if (err)
-		return (ft_error_arguments(err));
+		return (ft_error_arguments(err, param));
 	err = ft_init_philo(&phi, &param);
 	if (err)
-		return (ft_error_arguments(err));
+		return (ft_error_arguments(err, param));
 	err = ft_init_threads(phi);
 	if (err)
-		return (ft_error_arguments(err));
+		return (ft_error_arguments(err, param));
 	return (0);
 }
