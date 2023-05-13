@@ -9,10 +9,8 @@ OBJS		=	$(SRCS:.c=.o)
 NAME		=	philo
 CC			=	gcc
 RM 			=	rm -rf
-#LEAKS		=	-g3 -fsanitize=thread
-LEAKS		=	-g3 -fsanitize=address
 LIB			=	-pthread
-W_FLAGS		=	-Wall -Wextra -Werror -pedantic
+W_FLAGS		=	-Wall -Wextra -Werror
 
 #  Colors
 CYAN		=	\033[0;36m
@@ -32,7 +30,7 @@ all			:	$(NAME)
 
 $(NAME) 	:	$(OBJS)       
 				@echo "Linking object files ...\c"
-				@$(CC) $(OBJS) $(LEAKS) -I$(HEADER)$(LIB) -o $(NAME)
+				@$(CC) $(OBJS) -I$(HEADER) $(LIB) -o $(NAME)
 				@echo "$(GREEN)OK !$(RESET)"
 				@echo "$(YELLOW)$(NAME) programme created successfully !$(RESET)"
 

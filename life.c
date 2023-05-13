@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   life.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jutrera- <jutrera-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: jutrera- <jutrera-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 10:34:22 by jutrera-          #+#    #+#             */
-/*   Updated: 2023/04/28 10:34:22 by jutrera-         ###   ########.fr       */
+/*   Updated: 2023/05/13 15:19:38 by jutrera-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,17 @@ static int	ft_msg(char *s, t_param *param, t_philo *phi)
 		now = ft_get_time() - param->origin;
 		printf("|%s%8li%s ", YELLOW, now, NC);
 		printf("| %s%6d%s ", GREEN, phi->id + 1, NC);
-		printf("| %s\n", s);
+		printf("| %s", s);
 		if (ft_strcmp(F_R_MSG, s) == 0)
 		{
 			(phi->times_eaten)++;
+			printf("       |\n");
 			printf("|%s%8li%s ", YELLOW, now, NC);
 			printf("| %s%6d%s ", GREEN, phi->id + 1, NC);
-			printf("| %s %s%i%s\n", EATING, YELLOW, phi->times_eaten, NC);
+			printf("| %s %s%5i%s |\n", EATING, YELLOW, phi->times_eaten, NC);
 		}
+		else
+			printf("       |\n");
 	}
 	pthread_mutex_unlock(&(param->writing));
 	return (ft_strcmp(DEAD_MSG, s) == 0);
