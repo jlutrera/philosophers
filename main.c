@@ -49,7 +49,7 @@ static int	ft_init_param(int c, char **v, t_param *param)
 	param->n = ft_atoi(v[1]);
 	param->until_die = ft_atoi(v[2]);
 	if (param->n == 1)
-		return (5);
+		return (ft_manage_onephilo(*param));
 	param->eating = ft_atoi(v[3]);
 	param->sleeping = ft_atoi(v[4]);
 	param->max_eaten = -1;
@@ -94,12 +94,12 @@ int	main(int argc, char **argv)
 	phi = NULL;
 	err = ft_init_param(argc, argv, &param);
 	if (err)
-		return (ft_error_arguments(err, param));
+		return (ft_error_arguments(err));
 	err = ft_init_philo(&phi, &param);
 	if (err)
-		return (ft_error_arguments(err, param));
+		return (ft_error_arguments(err));
 	err = ft_init_threads(phi);
 	if (err)
-		return (ft_error_arguments(err, param));
+		return (ft_error_arguments(err));
 	return (0);
 }

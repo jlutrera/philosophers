@@ -23,7 +23,7 @@ void	ft_print_head_table(void)
 	printf("-----------------------------\u253c-------\u2524\n");
 }
 
-int	ft_error_arguments(int err, t_param param)
+int	ft_error_arguments(int err)
 {
 	if (err == 1)
 		printf("Mutex error !\n");
@@ -32,13 +32,7 @@ int	ft_error_arguments(int err, t_param param)
 	else if (err == 3)
 		printf("Malloc error !\n");
 	else if (err == 4)
-		printf("Bad number arguments !\n");
-	else if (err == 5)
-	{
-		printf("The philosopher will die in %i msec...", param.until_die);
-		usleep(param.until_die * 1000);
-		printf("(💀)\n");
-	}		
+		printf("Bad number arguments !\n");		
 	return (err);
 }
 
@@ -51,4 +45,18 @@ void	ft_print_bottom_table(int status, int meals)
 		printf("     %sALL PHILOSOPHERS HAVE EATEN ", CYAN);
 		printf("AT LEAST %s%i%s TIMES%s\n\n", YELLOW, meals, CYAN, NC);
 	}
+}
+
+int	ft_manage_onephilo(t_param param)
+{
+	ft_print_head_table();
+	printf("|%s%8d%s ", YELLOW, 0, NC);
+	printf("| %s%6d%s ", GREEN, 1, NC);
+	printf("| %s       |\n", THINK_MSG);
+	usleep(param.until_die * 1000);
+	printf("|%s%8d%s ", YELLOW, param.until_die + 1, NC);
+	printf("| %s%6d%s ", GREEN, 1, NC);
+	printf("| %s       |\n", DEAD_MSG);
+	ft_print_bottom_table(0, 0);
+	return (5);
 }

@@ -64,9 +64,10 @@ int				ft_atoi(const char *str);
 unsigned long	ft_get_time(void);
 void			ft_msleep(unsigned long time);
 //************* messages.c *******************
-int				ft_error_arguments(int err, t_param param);
+int				ft_error_arguments(int err);
 void			ft_print_bottom_table(int status, int meals);
 void			ft_print_head_table(void);
+int				ft_manage_onephilo(t_param param);
 //************* life.c ******************
 int				ft_init_threads(t_philo *phi);
 //************* life_utils.c ************
