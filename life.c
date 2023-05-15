@@ -72,7 +72,7 @@ static int	checker(t_philo *phi, t_param *param)
 				pthread_mutex_unlock(&(param->dc));
 			}
 			if (check_all_eaten(phi))
-				break;
+				break ;
 		}
 	}
 	return (param->all_ate == 1);

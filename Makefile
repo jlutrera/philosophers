@@ -24,9 +24,9 @@ RESET		=	\033[0m
 all			:	$(NAME)
 
 %.o			:	%.c
-				@echo "Compiling $(BLUE)$@$(RESET) ... \c"
-				@$(CC) $(CFLAGS) -c $< -o $@
-				@echo "$(GREEN)OK !$(RESET)" 
+				echo "Compiling $(BLUE)$@$(RESET) ... \c"
+				$(CC) $(CFLAGS) -c $< -o $@
+				echo "$(GREEN)OK !$(RESET)" 
 
 $(NAME) 	:	$(OBJS)
 				echo "Linking object files ...\c"
@@ -46,5 +46,5 @@ re			:	fclean all
 
 -include $(DEPS)
 
-.SILENT		:	all $(NAME) clean fclean re
+.SILENT		:	all $(NAME) clean fclean re $(OBJS)
 .PHONY		:	all clean fclean re

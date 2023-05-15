@@ -32,7 +32,7 @@ int	ft_error_arguments(int err)
 	else if (err == 3)
 		printf("Malloc error !\n");
 	else if (err == 4)
-		printf("Bad number arguments !\n");		
+		printf("Bad number arguments !\n");
 	return (err);
 }
 
@@ -52,8 +52,8 @@ int	ft_manage_onephilo(t_param param)
 	ft_print_head_table();
 	printf("|%s%8d%s ", YELLOW, 0, NC);
 	printf("| %s%6d%s ", GREEN, 1, NC);
-	printf("| %s       |\n", THINK_MSG);
-	usleep(param.until_die * 1000);
+	printf("| %s       |\n", F_L_MSG);
+	usleep((param.until_die + 1) * 1000);
 	printf("|%s%8d%s ", YELLOW, param.until_die + 1, NC);
 	printf("| %s%6d%s ", GREEN, 1, NC);
 	printf("| %s       |\n", DEAD_MSG);

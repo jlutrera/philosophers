@@ -47,7 +47,7 @@ void	ft_update(t_philo *phi)
 
 int	is_all_eaten(t_philo *phi)
 {
-	int r;
+	int	r;
 
 	pthread_mutex_lock(&(phi->param->dc));
 	r = phi->param->all_ate;
