@@ -6,7 +6,7 @@
 /*   By: jutrera- <jutrera-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 10:34:22 by jutrera-          #+#    #+#             */
-/*   Updated: 2023/05/13 20:41:00 by jutrera-         ###   ########.fr       */
+/*   Updated: 2023/05/17 18:04:09 by jutrera-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,25 +29,23 @@ static int	ft_clean_memory(t_philo *phi, t_param *param, pthread_t	*philos)
 
 static int	ft_msg(char *s, t_param *param, t_philo *phi)
 {
-	unsigned long	now;
 	int				sd;
 
-	pthread_mutex_lock(&(param->writing));
 	pthread_mutex_lock(&(param->dc));
 	sd = param->someone_dead;
 	pthread_mutex_unlock(&(param->dc));
 	if (!sd)
 	{
-		now = ft_get_time() - param->origin;
-		printf("|%s%8li%s ", YELLOW, now, NC);
+		pthread_mutex_lock(&(param->writing));
+		printf("|%s%8li%s ", YELLOW, ft_get_time() - param->origin, NC);
 		printf("| %s%6d%s ", GREEN, phi->id + 1, NC);
 		printf("| %s", s);
 		if (ft_strcmp(EATING_MSG, s) == 0)
 			printf(" %s%5i%s |\n", YELLOW, phi->times_eaten, NC);
 		else
 			printf("       |\n");
+		pthread_mutex_unlock(&(param->writing));
 	}
-	pthread_mutex_unlock(&(param->writing));
 	return (ft_strcmp(DEAD_MSG, s) == 0);
 }
 
@@ -56,7 +54,7 @@ static int	checker(t_philo *phi, t_param *param)
 	int	i;
 	int	lap;
 
-	while (!is_someone_dead(phi))
+	while (!is_someone_dead(phi) && !is_all_eaten(phi))
 	{
 		i = -1;
 		while (++i < param->n && !is_someone_dead(phi))
@@ -83,6 +81,7 @@ static void	*life(void *arg)
 	t_philo	*phi;
 
 	phi = arg;
+	phi->last_meal = phi->param->origin;
 	while (1)
 	{
 		if (is_someone_dead(phi))
@@ -120,9 +119,6 @@ int	ft_init_threads(t_philo *phi)
 	while (++i < phi[0].param->n)
 	{
 		pthread_create(&philos[i], NULL, life, &(phi[i]));
-		pthread_mutex_lock(&(phi->param->dc));
-		phi[i].last_meal = phi[0].param->origin;
-		pthread_mutex_unlock(&(phi->param->dc));
 		usleep(50);
 	}
 	status = checker(phi, phi[0].param);
