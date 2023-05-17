@@ -6,7 +6,7 @@
 /*   By: jutrera- <jutrera-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 10:34:22 by jutrera-          #+#    #+#             */
-/*   Updated: 2023/05/17 18:04:09 by jutrera-         ###   ########.fr       */
+/*   Updated: 2023/05/17 18:17:37 by jutrera-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static int	ft_msg(char *s, t_param *param, t_philo *phi)
 			printf("       |\n");
 		pthread_mutex_unlock(&(param->writing));
 	}
-	return (ft_strcmp(DEAD_MSG, s) == 0);
+	return (!ft_strcmp(DEAD_MSG, s));
 }
 
 static int	checker(t_philo *phi, t_param *param)
@@ -57,7 +57,7 @@ static int	checker(t_philo *phi, t_param *param)
 	while (!is_someone_dead(phi) && !is_all_eaten(phi))
 	{
 		i = -1;
-		while (++i < param->n && !is_someone_dead(phi))
+		while (++i < param->n && !is_someone_dead(phi) && !is_all_eaten(phi))
 		{
 			pthread_mutex_lock(&(param->dc));
 			lap = (int)(ft_get_time() - phi[i].last_meal);
@@ -69,11 +69,10 @@ static int	checker(t_philo *phi, t_param *param)
 				param->someone_dead = 1;
 				pthread_mutex_unlock(&(param->dc));
 			}
-			if (check_all_eaten(phi))
-				break ;
+			check_all_eaten(phi);
 		}
 	}
-	return (param->all_ate == 1);
+	return (param->all_ate);
 }
 
 static void	*life(void *arg)
@@ -82,10 +81,8 @@ static void	*life(void *arg)
 
 	phi = arg;
 	phi->last_meal = phi->param->origin;
-	while (1)
+	while (!is_someone_dead(phi))
 	{
-		if (is_someone_dead(phi))
-			break ;
 		ft_msg(THINK_MSG, phi->param, phi);
 		pthread_mutex_lock(&(phi->param->forks[phi->fork_left]));
 		ft_msg(F_L_MSG, phi->param, phi);

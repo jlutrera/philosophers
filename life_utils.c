@@ -6,7 +6,7 @@
 /*   By: jutrera- <jutrera-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 20:32:28 by jutrera-          #+#    #+#             */
-/*   Updated: 2023/05/13 20:40:32 by jutrera-         ###   ########.fr       */
+/*   Updated: 2023/05/17 18:10:49 by jutrera-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	is_someone_dead(t_philo *phi)
 	return (r);
 }
 
-int	check_all_eaten(t_philo *phi)
+void	check_all_eaten(t_philo *phi)
 {
 	int	i;
 
@@ -34,7 +34,6 @@ int	check_all_eaten(t_philo *phi)
 	if (i == phi->param->n)
 		phi->param->all_ate = 1;
 	pthread_mutex_unlock(&(phi->param->dc));
-	return (phi->param->all_ate == 1);
 }
 
 void	ft_update(t_philo *phi)

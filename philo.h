@@ -6,7 +6,7 @@
 /*   By: jutrera- <jutrera-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 10:31:50 by jutrera-          #+#    #+#             */
-/*   Updated: 2023/05/13 20:40:42 by jutrera-         ###   ########.fr       */
+/*   Updated: 2023/05/17 18:11:10 by jutrera-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int				ft_manage_onephilo(t_param param);
 int				ft_init_threads(t_philo *phi);
 //************* life_utils.c ************
 int				is_someone_dead(t_philo *phi);
-int				check_all_eaten(t_philo *phi);
+void			check_all_eaten(t_philo *phi);
 void			ft_update(t_philo *phi);
 int				is_all_eaten(t_philo *phi);
 
