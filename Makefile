@@ -8,7 +8,8 @@ DEPS		=	$(SRCS:.c=.d)
 # Constant strings
 NAME		=	philo
 CC			=	gcc
-CFLAGS		=	-MMD -Wall -Wextra -Werror -fsanitize=thread -g3
+#CFLAGS		=	-MMD -Wall -Wextra -Werror -fsanitize=thread -g3
+CFLAGS		=	-MMD -Wall -Wextra -Werror
 RM 			=	rm -rf
 LDFLAGS		=	-pthread
 
