@@ -16,9 +16,11 @@ static int	args_arent_good(int c, char **v)
 {
 	int	i;
 
-	if (c != 5 && c != 6)
-		return (4);
 	i = 0;
+	if (ft_strcmp(v[1], "-v") == 0)
+		i = 1;
+	if (c != 5 + i && c != 6 + i)
+		return (4);
 	while (++i < c)
 		if (ft_atoi(v[i]) < 1)
 			return (2);
@@ -42,19 +44,22 @@ static int	ft_init_mutex(t_param *param)
 static int	ft_init_param(int c, char **v, t_param *param)
 {
 	int	e;
+	int	i;
 
 	e = args_arent_good(c, v);
 	if (e)
 		return (e);
-	param->n = ft_atoi(v[1]);
-	param->until_die = ft_atoi(v[2]);
+	i = (ft_strcmp(v[1], "-v") == 0);
+	param->visual = i;
+	param->n = ft_atoi(v[1 + i]);
+	param->until_die = ft_atoi(v[2 + i]);
 	if (param->n == 1)
 		return (ft_manage_onephilo(*param));
-	param->eating = ft_atoi(v[3]);
-	param->sleeping = ft_atoi(v[4]);
+	param->eating = ft_atoi(v[3 + i]);
+	param->sleeping = ft_atoi(v[4 + i]);
 	param->max_eaten = -1;
-	if (c == 6)
-		param->max_eaten = ft_atoi(v[5]);
+	if (c == 6 + i)
+		param->max_eaten = ft_atoi(v[5 + i]);
 	param->someone_dead = 0;
 	param->all_ate = 0;
 	param->forks = malloc(param->n * sizeof(pthread_mutex_t));

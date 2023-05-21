@@ -37,13 +37,19 @@ static int	ft_msg(char *s, t_param *param, t_philo *phi)
 	if (!sd)
 	{
 		pthread_mutex_lock(&(param->writing));
-		printf("|%s%8li%s ", YELLOW, ft_get_time() - param->origin, NC);
-		printf("| %s%6d%s ", GREEN, phi->id + 1, NC);
-		printf("| %s", s);
-		if (ft_strcmp(EATING_MSG, s) == 0)
-			printf(" %s%5i%s |\n", YELLOW, phi->times_eaten, NC);
-		else
-			printf("       |\n");
+		if (!param->visual && !param->someone_dead)
+			printf("[%li] [%i] %s\n", ft_get_time() - param->origin,
+				phi->id + 1, s);
+		else if (!param->someone_dead)
+		{
+			printf("|%s%8li%s ", YELLOW, ft_get_time() - param->origin, NC);
+			printf("| %s%6d%s ", GREEN, phi->id + 1, NC);
+			printf("| %s |", s);
+			if (ft_strcmp(EATING_MSG, s) == 0)
+				printf(" %s%5i%s |\n", YELLOW, phi->times_eaten, NC);
+			else
+				printf("       |\n");
+		}
 		pthread_mutex_unlock(&(param->writing));
 	}
 	return (!ft_strcmp(DEAD_MSG, s));
@@ -107,7 +113,7 @@ int	ft_init_threads(t_philo *phi)
 	int				status;
 	pthread_t		*philos;
 
-	ft_print_head_table();
+	ft_print_head_table(phi[0].param);
 	philos = malloc(phi[0].param->n * sizeof(pthread_t));
 	if (!philos)
 		return (3);
@@ -122,6 +128,6 @@ int	ft_init_threads(t_philo *phi)
 	i = -1;
 	while (++i < phi[0].param->n)
 		pthread_join(philos[i], NULL);
-	ft_print_bottom_table(status, phi[0].param->max_eaten);
+	ft_print_bottom_table(status, phi[0].param);
 	return (ft_clean_memory(phi, phi[0].param, philos));
 }

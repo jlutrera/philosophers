@@ -12,15 +12,18 @@
 
 #include "philo.h"
 
-void	ft_print_head_table(void)
+void	ft_print_head_table(t_param *param)
 {
 	printf("\n\n       %sPHILOSOPHERS BEGIN TO EAT, ", CYAN);
 	printf("SLEEP & THINK !%s      \n", NC);
-	printf("\u250c---------\u252c--------\u252c");
-	printf("-----------------------------\u252c-------\u2510\n");
-	printf("| Lap(ms) | Philo. |            Action           | Meals |\n");
-	printf("\u251c---------\u253c--------\u253c");
-	printf("-----------------------------\u253c-------\u2524\n");
+	if (param->visual)
+	{
+		printf("\u250c---------\u252c--------\u252c");
+		printf("-----------------------------\u252c-------\u2510\n");
+		printf("| Lap(ms) | Philo. |            Action           | Meals |\n");
+		printf("\u251c---------\u253c--------\u253c");
+		printf("-----------------------------\u253c-------\u2524\n");
+	}
 }
 
 int	ft_error_arguments(int err)
@@ -36,20 +39,23 @@ int	ft_error_arguments(int err)
 	return (err);
 }
 
-void	ft_print_bottom_table(int status, int meals)
+void	ft_print_bottom_table(int status, t_param *param)
 {
-	printf("\u2514---------\u2534--------");
-	printf("\u2534-----------------------------\u2534-------\u2518\n");
+	if (param->visual)
+	{
+		printf("\u2514---------\u2534--------");
+		printf("\u2534-----------------------------\u2534-------\u2518\n");
+	}
 	if (status)
 	{
 		printf("     %sALL PHILOSOPHERS HAVE EATEN ", CYAN);
-		printf("AT LEAST %s%i%s TIMES%s\n\n", YELLOW, meals, CYAN, NC);
+		printf("AT LEAST %s%i%s TIMES%s\n\n", YELLOW, param->max_eaten, CYAN, NC);
 	}
 }
 
 int	ft_manage_onephilo(t_param param)
 {
-	ft_print_head_table();
+	ft_print_head_table(&param);
 	printf("|%s%8d%s ", YELLOW, 0, NC);
 	printf("| %s%6d%s ", GREEN, 1, NC);
 	printf("| %s       |\n", F_L_MSG);
@@ -57,6 +63,6 @@ int	ft_manage_onephilo(t_param param)
 	printf("|%s%8d%s ", YELLOW, param.until_die + 1, NC);
 	printf("| %s%6d%s ", GREEN, 1, NC);
 	printf("| %s       |\n", DEAD_MSG);
-	ft_print_bottom_table(0, 0);
+	ft_print_bottom_table(0, &param);
 	return (5);
 }
